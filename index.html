@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow • Gerenciador de Tarefas Inteligente</title>
+  <meta name="description" content="Aplicativo moderno e completo de gerenciamento de tarefas (To-Do) construído exclusivamente com HTML, CSS e JavaScript puro.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Background Glow Accents -->
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="app-header py-3 sticky-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        <div class="logo-icon-wrapper">
+          <i class="fa-solid fa-list-check logo-icon"></i>
+        </div>
+        <div>
+          <h1 class="h4 mb-0 fw-bold app-title">TaskFlow<span class="text-gradient">.io</span></h1>
+          <p class="text-muted small mb-0 d-none d-sm-block">Seu organizador de tarefas diárias</p>
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center gap-2">
+        <!-- Importar / Exportar Dados -->
+        <div class="dropdown">
+          <button class="btn btn-outline-custom btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Opções de Backup">
+            <i class="fa-solid fa-cloud-arrow-down me-1"></i> <span class="d-none d-md-inline">Dados</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            <li>
+              <a class="dropdown-item" href="#" id="btnExportJson">
+                <i class="fa-solid fa-file-export me-2 text-primary"></i>Exportar Tarefas (JSON)
+              </a>
+            </li>
+            <li>
+              <label class="dropdown-item mb-0 cursor-pointer" for="fileImportInput">
+                <i class="fa-solid fa-file-import me-2 text-success"></i>Importar Backup (JSON)
+              </label>
+              <input type="file" id="fileImportInput" accept=".json" class="d-none">
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" id="btnClearCompleted">
+                <i class="fa-solid fa-trash-can me-2"></i>Limpar Concluídas
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Alternador de Tema -->
+        <button id="themeToggleBtn" class="btn btn-outline-custom btn-sm" type="button" aria-label="Alternar tema claro/escuro" title="Alternar tema claro/escuro">
+          <i class="fa-solid fa-moon theme-icon" id="themeIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-4">
+    <!-- Métricas / Dashboard de Progresso -->
+    <section class="card stats-card mb-4 border-0 shadow-sm">
+      <div class="card-body p-4">
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <span class="text-muted small fw-medium text-uppercase">Total</span>
+              <div class="d-flex align-items-baseline gap-2">
+                <h3 class="fw-bold mb-0" id="statTotal">0</h3>
+                <i class="fa-solid fa-layer-group text-primary opacity-50"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <span class="text-muted small fw-medium text-uppercase">Pendentes</span>
+              <div class="d-flex align-items-baseline gap-2">
+                <h3 class="fw-bold mb-0 text-warning" id="statPending">0</h3>
+                <i class="fa-regular fa-clock text-warning opacity-50"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <span class="text-muted small fw-medium text-uppercase">Concluídas</span>
+              <div class="d-flex align-items-baseline gap-2">
+                <h3 class="fw-bold mb-0 text-success" id="statCompleted">0</h3>
+                <i class="fa-solid fa-circle-check text-success opacity-50"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stat-item">
+              <span class="text-muted small fw-medium text-uppercase">Atrasadas</span>
+              <div class="d-flex align-items-baseline gap-2">
+                <h3 class="fw-bold mb-0 text-danger" id="statOverdue">0</h3>
+                <i class="fa-solid fa-triangle-exclamation text-danger opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Barra de Progresso Geral -->
+        <div>
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <span class="small fw-semibold text-muted">Progresso geral</span>
+            <span class="small fw-bold" id="progressPercentage">0%</span>
+          </div>
+          <div class="progress progress-modern" role="progressbar" aria-label="Progresso das tarefas">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulário para Criação de Tarefas -->
+    <section class="card form-card mb-4 border-0 shadow-sm">
+      <div class="card-body p-4">
+        <form id="taskForm" autocomplete="off">
+          <div class="row g-3">
+            <!-- Título da Tarefa -->
+            <div class="col-12 col-lg-6">
+              <label for="taskTitle" class="form-label fw-semibold small text-uppercase text-muted">Título da Tarefa <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-pen-nib"></i></span>
+                <input type="text" class="form-control" id="taskTitle" placeholder="Ex: Finalizar relatório financeiro..." required maxlength="120">
+              </div>
+            </div>
+
+            <!-- Categoria / Tag -->
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="taskCategory" class="form-label fw-semibold small text-uppercase text-muted">Categoria</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-tag"></i></span>
+                <select class="form-select" id="taskCategory">
+                  <option value="Trabalho">💼 Trabalho</option>
+                  <option value="Estudos">📚 Estudos</option>
+                  <option value="Pessoal">🏡 Pessoal</option>
+                  <option value="Saúde">🏃 Saúde</option>
+                  <option value="Finanças">💰 Finanças</option>
+                  <option value="Outros" selected>📌 Outros</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Nível de Prioridade -->
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="taskPriority" class="form-label fw-semibold small text-uppercase text-muted">Prioridade</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-solid fa-flag"></i></span>
+                <select class="form-select" id="taskPriority">
+                  <option value="baixa">🟢 Baixa</option>
+                  <option value="media" selected>🟡 Média</option>
+                  <option value="alta">🔴 Alta</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Descrição Opcional -->
+            <div class="col-12 col-lg-8">
+              <label for="taskDescription" class="form-label fw-semibold small text-uppercase text-muted">Descrição (Opcional)</label>
+              <input type="text" class="form-control" id="taskDescription" placeholder="Detalhes adicionais, links ou passos para concluir..." maxlength="250">
+            </div>
+
+            <!-- Data de Conclusão Prevista -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <label for="taskDueDate" class="form-label fw-semibold small text-uppercase text-muted">Data Limite (Opcional)</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fa-regular fa-calendar-days"></i></span>
+                <input type="date" class="form-control" id="taskDueDate">
+              </div>
+            </div>
+
+            <!-- Botão Adicionar -->
+            <div class="col-12 d-flex justify-content-end mt-3">
+              <button type="submit" class="btn btn-primary-gradient px-4 py-2">
+                <i class="fa-solid fa-plus me-1"></i> Adicionar Tarefa
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Barra de Filtros, Pesquisa e Ordenação -->
+    <section class="controls-bar card mb-4 border-0 shadow-sm">
+      <div class="card-body p-3">
+        <div class="row g-2 align-items-center">
+          <!-- Campo de Busca -->
+          <div class="col-12 col-md-4">
+            <div class="search-box position-relative">
+              <i class="fa-solid fa-magnifying-glass search-icon text-muted"></i>
+              <input type="text" id="searchInput" class="form-control search-input ps-5 pe-4" placeholder="Buscar por título ou descrição...">
+              <button class="btn btn-clear-search d-none" id="btnClearSearch" type="button" title="Limpar busca">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filtros de Status (Pills) -->
+          <div class="col-12 col-md-8 col-lg-8">
+            <div class="d-flex flex-wrap gap-2 justify-content-md-end align-items-center">
+              <div class="btn-group btn-group-sm filter-status-group" role="group" aria-label="Filtro de Status">
+                <button type="button" class="btn btn-filter active" data-filter="all">Todas</button>
+                <button type="button" class="btn btn-filter" data-filter="pending">Pendentes</button>
+                <button type="button" class="btn btn-filter" data-filter="completed">Concluídas</button>
+              </div>
+
+              <!-- Filtro de Categoria -->
+              <select class="form-select form-select-sm filter-select w-auto" id="filterCategory">
+                <option value="all">Todas Categorias</option>
+                <option value="Trabalho">Trabalho</option>
+                <option value="Estudos">Estudos</option>
+                <option value="Pessoal">Pessoal</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Finanças">Finanças</option>
+                <option value="Outros">Outros</option>
+              </select>
+
+              <!-- Filtro de Prioridade -->
+              <select class="form-select form-select-sm filter-select w-auto" id="filterPriority">
+                <option value="all">Todas Prioridades</option>
+                <option value="alta">Alta</option>
+                <option value="media">Média</option>
+                <option value="baixa">Baixa</option>
+              </select>
+
+              <!-- Ordenação -->
+              <select class="form-select form-select-sm filter-select w-auto" id="sortBy">
+                <option value="created-desc">Mais recentes</option>
+                <option value="created-asc">Mais antigas</option>
+                <option value="due-asc">Vencimento próximo</option>
+                <option value="priority-desc">Maior prioridade</option>
+                <option value="title-asc">Título (A-Z)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lista de Tarefas -->
+    <section>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 fw-bold mb-0">
+          Minhas Tarefas <span class="badge bg-secondary rounded-pill ms-1" id="visibleTasksCount">0</span>
+        </h2>
+      </div>
+
+      <!-- Container da Lista -->
+      <div id="taskList" class="task-list-container d-flex flex-column gap-3">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+
+      <!-- Estado Vazio (Empty State) -->
+      <div id="emptyState" class="empty-state text-center p-5 card border-0 shadow-sm d-none">
+        <div class="empty-state-icon mb-3">
+          <i class="fa-regular fa-clipboard"></i>
+        </div>
+        <h3 class="h5 fw-bold mb-1">Nenhuma tarefa encontrada</h3>
+        <p class="text-muted small mb-3" id="emptyStateSubtitle">Você não possui tarefas pendentes neste filtro. Crie uma nova tarefa acima para começar!</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de Edição de Tarefa -->
+  <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content custom-modal-content border-0 shadow">
+        <div class="modal-header border-bottom-0 pb-0">
+          <h1 class="modal-title fs-5 fw-bold" id="editTaskModalLabel">
+            <i class="fa-solid fa-pen-to-square text-primary me-2"></i>Editar Tarefa
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <form id="editTaskForm">
+          <div class="modal-body py-3">
+            <input type="hidden" id="editTaskId">
+            
+            <div class="mb-3">
+              <label for="editTaskTitle" class="form-label small fw-semibold text-muted text-uppercase">Título <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="editTaskTitle" required maxlength="120">
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-sm-6">
+                <label for="editTaskCategory" class="form-label small fw-semibold text-muted text-uppercase">Categoria</label>
+                <select class="form-select" id="editTaskCategory">
+                  <option value="Trabalho">💼 Trabalho</option>
+                  <option value="Estudos">📚 Estudos</option>
+                  <option value="Pessoal">🏡 Pessoal</option>
+                  <option value="Saúde">🏃 Saúde</option>
+                  <option value="Finanças">💰 Finanças</option>
+                  <option value="Outros">📌 Outros</option>
+                </select>
+              </div>
+              <div class="col-sm-6">
+                <label for="editTaskPriority" class="form-label small fw-semibold text-muted text-uppercase">Prioridade</label>
+                <select class="form-select" id="editTaskPriority">
+                  <option value="baixa">🟢 Baixa</option>
+                  <option value="media">🟡 Média</option>
+                  <option value="alta">🔴 Alta</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="editTaskDueDate" class="form-label small fw-semibold text-muted text-uppercase">Data Limite</label>
+              <input type="date" class="form-control" id="editTaskDueDate">
+            </div>
+
+            <div class="mb-2">
+              <label for="editTaskDescription" class="form-label small fw-semibold text-muted text-uppercase">Descrição</label>
+              <textarea class="form-control" id="editTaskDescription" rows="3" maxlength="250" placeholder="Detalhes da tarefa..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer border-top-0 pt-0">
+            <button type="button" class="btn btn-secondary btn-sm px-3" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary-gradient btn-sm px-4">Salvar Alterações</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container para Notificações -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">
+    <div id="appToast" class="toast align-items-center border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2" id="toastMessage">
+          <!-- Mensagem dinâmica -->
+        </div>
+        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer class="app-footer py-4 mt-auto text-center border-top">
+    <div class="container">
+      <p class="text-muted small mb-1">
+        <strong>TaskFlow</strong> &copy; 2026 • Gerenciador de Tarefas Offline e Responsivo.
+      </p>
+      <p class="text-muted extra-small mb-0">
+        Desenvolvido exclusivamente com <span class="text-danger">&hearts;</span>, HTML5, CSS3 e Vanilla JavaScript.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Bootstrap 5.3.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- App JavaScript -->
+  <script src="app.js"></script>
+</body>
+</html>

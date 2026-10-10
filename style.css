@@ -1,0 +1,643 @@
+/* ============================================================
+   TaskFlow - Modern To-Do CSS Styling
+   Design: Glassmorphism, Micro-interactions, Dark & Light Mode
+   ============================================================ */
+
+:root {
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Cores Base - Modo Escuro Padrão */
+  --bg-primary: #0b0f19;
+  --bg-surface: rgba(22, 28, 45, 0.75);
+  --bg-surface-hover: rgba(30, 41, 67, 0.85);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(99, 102, 241, 0.3);
+
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-faint: #64748b;
+
+  --accent-primary: #6366f1;
+  --accent-primary-hover: #4f46e5;
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --progress-gradient: linear-gradient(90deg, #6366f1, #3b82f6, #10b981);
+
+  --priority-high-bg: rgba(239, 68, 68, 0.15);
+  --priority-high-text: #f87171;
+  --priority-high-border: rgba(239, 68, 68, 0.3);
+
+  --priority-medium-bg: rgba(245, 158, 11, 0.15);
+  --priority-medium-text: #fbbf24;
+  --priority-medium-border: rgba(245, 158, 11, 0.3);
+
+  --priority-low-bg: rgba(16, 185, 129, 0.15);
+  --priority-low-text: #34d399;
+  --priority-low-border: rgba(16, 185, 129, 0.3);
+
+  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  --glow-1: rgba(99, 102, 241, 0.18);
+  --glow-2: rgba(236, 72, 153, 0.14);
+}
+
+[data-bs-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-surface: rgba(255, 255, 255, 0.85);
+  --bg-surface-hover: rgba(248, 250, 252, 0.95);
+  --border-color: rgba(226, 232, 240, 0.8);
+  --border-highlight: rgba(99, 102, 241, 0.4);
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-faint: #94a3b8;
+
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+  --progress-gradient: linear-gradient(90deg, #4f46e5, #2563eb, #059669);
+
+  --priority-high-bg: #fee2e2;
+  --priority-high-text: #dc2626;
+  --priority-high-border: #fca5a5;
+
+  --priority-medium-bg: #fef3c7;
+  --priority-medium-text: #d97706;
+  --priority-medium-border: #fde68a;
+
+  --priority-low-bg: #d1fae5;
+  --priority-low-text: #059669;
+  --priority-low-border: #a7f3d0;
+
+  --card-shadow: 0 10px 25px -5px rgba(100, 116, 139, 0.08), 0 8px 10px -6px rgba(100, 116, 139, 0.05);
+  --glow-1: rgba(99, 102, 241, 0.08);
+  --glow-2: rgba(236, 72, 153, 0.06);
+}
+
+/* ============================================================
+   Base & Typography
+   ============================================================ */
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6, .app-title {
+  font-family: var(--font-heading);
+}
+
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.extra-small {
+  font-size: 0.75rem;
+}
+
+/* ============================================================
+   Background Glow Effects
+   ============================================================ */
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity 0.5s ease;
+}
+
+.bg-glow-1 {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  left: -150px;
+  background: var(--glow-1);
+}
+
+.bg-glow-2 {
+  width: 550px;
+  height: 550px;
+  bottom: -150px;
+  right: -150px;
+  background: var(--glow-2);
+}
+
+/* ============================================================
+   Header & Navigation
+   ============================================================ */
+.app-header {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background-color: rgba(11, 15, 25, 0.7);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 1030;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+[data-bs-theme="light"] .app-header {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.logo-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+}
+
+.logo-icon {
+  font-size: 1.25rem;
+  color: #ffffff;
+}
+
+.btn-outline-custom {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 0.45rem 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover,
+.btn-outline-custom:focus {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-highlight);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   Cards & Glassmorphism
+   ============================================================ */
+.card, .custom-modal-content {
+  background-color: var(--bg-surface) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color) !important;
+  border-radius: 16px;
+  box-shadow: var(--card-shadow);
+  transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stats-card {
+  border-left: 4px solid var(--accent-primary) !important;
+}
+
+.stat-item {
+  padding: 0.5rem;
+}
+
+/* Barra de Progresso */
+.progress-modern {
+  height: 8px;
+  border-radius: 10px;
+  background-color: rgba(148, 163, 184, 0.15);
+  overflow: hidden;
+}
+
+.progress-modern .progress-bar {
+  background: var(--progress-gradient);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   Formulário & Inputs
+   ============================================================ */
+.form-control, .form-select {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+[data-bs-theme="light"] .form-control,
+[data-bs-theme="light"] .form-select {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-primary);
+  color: var(--text-main);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+[data-bs-theme="light"] .form-control:focus,
+[data-bs-theme="light"] .form-select:focus {
+  background-color: #ffffff;
+}
+
+.input-group-text {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 10px;
+}
+
+.btn-primary-gradient {
+  background: var(--accent-gradient);
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-primary-gradient:hover {
+  opacity: 0.93;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.btn-primary-gradient:active {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   Barra de Controles & Filtros
+   ============================================================ */
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.btn-clear-search {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.2rem 0.5rem;
+}
+
+.btn-clear-search:hover {
+  color: var(--text-main);
+}
+
+.filter-status-group {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid var(--border-color);
+}
+
+.btn-filter {
+  border: none;
+  border-radius: 8px !important;
+  color: var(--text-muted);
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-filter:hover {
+  color: var(--text-main);
+}
+
+.btn-filter.active {
+  background: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.filter-select {
+  border-radius: 8px;
+}
+
+/* ============================================================
+   Task Card Component
+   ============================================================ */
+.task-item {
+  position: relative;
+  border-radius: 14px;
+  padding: 1.1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.25s ease;
+  animation: taskSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes taskSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.task-item:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+
+/* Indicador de Prioridade na borda esquerda */
+.task-item::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+
+.task-item.priority-alta::before {
+  background-color: #ef4444;
+}
+
+.task-item.priority-media::before {
+  background-color: #f59e0b;
+}
+
+.task-item.priority-baixa::before {
+  background-color: #10b981;
+}
+
+/* Checkbox Customizado */
+.custom-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  margin-top: 2px;
+  cursor: pointer;
+  border-radius: 7px;
+  border: 2px solid var(--text-faint);
+  background: transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-checkbox:hover {
+  border-color: var(--accent-primary);
+  transform: scale(1.08);
+}
+
+.custom-checkbox.checked {
+  background: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.custom-checkbox i {
+  color: #ffffff;
+  font-size: 0.75rem;
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.custom-checkbox.checked i {
+  transform: scale(1);
+}
+
+/* Conteúdo da Tarefa */
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+  transition: all 0.2s ease;
+}
+
+.task-item.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+.task-description {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+  word-break: break-word;
+}
+
+.task-item.completed .task-description {
+  opacity: 0.6;
+}
+
+/* Badges e Metadados */
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-priority-alta {
+  background-color: var(--priority-high-bg);
+  color: var(--priority-high-text);
+  border: 1px solid var(--priority-high-border);
+}
+
+.badge-priority-media {
+  background-color: var(--priority-medium-bg);
+  color: var(--priority-medium-text);
+  border: 1px solid var(--priority-medium-border);
+}
+
+.badge-priority-baixa {
+  background-color: var(--priority-low-bg);
+  color: var(--priority-low-text);
+  border: 1px solid var(--priority-low-border);
+}
+
+.badge-category {
+  background-color: rgba(255, 255, 255, 0.07);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.badge-due-date {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.badge-due-date.overdue {
+  background-color: var(--priority-high-bg);
+  color: var(--priority-high-text);
+  border: 1px solid var(--priority-high-border);
+  animation: pulseWarning 2s infinite;
+}
+
+@keyframes pulseWarning {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
+}
+
+/* Botões de Ação na Tarefa */
+.task-actions {
+  display: flex;
+  gap: 0.35rem;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.task-item:hover .task-actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.btn-icon.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.btn-icon.btn-edit:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+}
+
+/* ============================================================
+   Empty State
+   ============================================================ */
+.empty-state {
+  border-radius: 16px;
+  background: var(--bg-surface);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  color: var(--text-faint);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   Toast & Modals
+   ============================================================ */
+.toast {
+  background-color: var(--bg-surface) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 12px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.app-footer {
+  background-color: transparent;
+  border-color: var(--border-color) !important;
+}
+
+/* ============================================================
+   Responsividade
+   ============================================================ */
+@media (max-width: 576px) {
+  .task-item {
+    padding: 0.9rem;
+    gap: 0.75rem;
+  }
+  
+  .task-title {
+    font-size: 0.98rem;
+  }
+  
+  .filter-status-group {
+    width: 100%;
+    display: flex;
+  }
+  
+  .filter-status-group .btn-filter {
+    flex: 1;
+    text-align: center;
+  }
+}
